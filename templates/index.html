@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1>Welcome to GuardianScan</h1>
+        <div class="row">
+            <div class="col">
+                <p>Your main content goes here</p>
+            </div>
+            <div class="col">
+                <form action="/scan" method="post">
+                    <div class="form-group">
+                        <label for="url">Enter URL to scan:</label>
+                        <input type="url" class="form-control" id="url" name="url" required placeholder="https://example.com">
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-2">Scan URL</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
