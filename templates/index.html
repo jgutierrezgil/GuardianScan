@@ -9,7 +9,8 @@
         <h1>Welcome to GuardianScan</h1>
         <div class="row">
             <div class="col">
-                <p>Your main content goes here</p>
+                <p>¡Bienvenido a GuardianScan! Este es mi proyecto final para el curso CS50 de Harvard University.</p>
+                <p>GuardianScan es una herramienta de análisis de seguridad web que puede detectar vulnerabilidades comunes como XSS y SQLi en sitios web.</p>
             </div>
             <div class="col">
                 <form method="POST">
@@ -25,11 +26,17 @@
                             {% if result.xss %}🚫 Sí{% else %}✅ No{% endif %}
                         </span>
                     </p>
+                    <div name="xss_payload" style="margin-left: 20px;">
+                        <p>Payload: {{ result.xss_payload }}</p>
+                    </div>
                     <p>SQLi Vulnerable: 
                         <span class="{% if result.sqli %}vulnerable{% else %}safe{% endif %}">
                             {% if result.sqli %}🚫 Sí{% else %}✅ No{% endif %}
                         </span>
                     </p>
+                    <div name="sqli_payload" style="margin-left: 20px;">
+                        <p>Payload: {{ result.sqli_payload }}</p>
+                    </div>
                 </div>
                 {% endif %}
 

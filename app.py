@@ -55,6 +55,7 @@ def check_xss(url):
         try:
             response = requests.get(url + payload)
             if payload in response.text:
+                
                 return True
         except:
             pass
