@@ -26,9 +26,16 @@
                             {% if result.xss %}🚫 Sí{% else %}✅ No{% endif %}
                         </span>
                     </p>
+                    {% if result.xss %}
                     <div name="xss_payload" style="margin-left: 20px;">
-                        <p>Payload: {{ result.xss_payload }}</p>
+                        <p>Payloads exitosos:</p>
+                        <ul>
+                        {% for payload in result.xss %}
+                            <li>{{ payload }}</li>
+                        {% endfor %}
+                        </ul>
                     </div>
+                    {% endif %}
                     <p>SQLi Vulnerable: 
                         <span class="{% if result.sqli %}vulnerable{% else %}safe{% endif %}">
                             {% if result.sqli %}🚫 Sí{% else %}✅ No{% endif %}
