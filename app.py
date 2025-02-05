@@ -1,11 +1,27 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import requests
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route("/", methods=["GET", "POST"])
 def index():
-    return render_template('index.html')
+    result = {}
+    if request.method == "POST":
+        url = request.form["url"]
+        
+        try:
+            response = requests.get(url)
+            if response.status_code != 200:
+                return render_template("index.html", error="Website not accessible")
+        except requests.exceptions.RequestException:
+            return render_template("index.html", error="Could not connect to website")
+        
+        result = {
+            "url": url,
+            "xss": check_xss(url),
+            "sqli": check_sqli(url)
+        }
+    return render_template("index.html", result=result)
 
 def leer_archivo_a_lista(ruta_archivo):
     """

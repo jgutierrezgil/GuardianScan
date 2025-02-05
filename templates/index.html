@@ -12,13 +12,30 @@
                 <p>Your main content goes here</p>
             </div>
             <div class="col">
-                <form action="/scan" method="post">
-                    <div class="form-group">
-                        <label for="url">Enter URL to scan:</label>
-                        <input type="url" class="form-control" id="url" name="url" required placeholder="https://example.com">
-                    </div>
-                    <button type="submit" class="btn btn-primary mt-2">Scan URL</button>
+                <form method="POST">
+                    <input type="text" name="url" placeholder="Ej: http://localhost:5001/xss?q=" required style="width: 300px;">
+                    <button type="submit">Escanear</button>
                 </form>
+            
+                {% if result %}
+                <div style="margin-top: 20px;">
+                    <h3>Resultados para {{ result.url }}:</h3>
+                    <p>XSS Vulnerable: 
+                        <span class="{% if result.xss %}vulnerable{% else %}safe{% endif %}">
+                            {% if result.xss %}🚫 Sí{% else %}✅ No{% endif %}
+                        </span>
+                    </p>
+                    <p>SQLi Vulnerable: 
+                        <span class="{% if result.sqli %}vulnerable{% else %}safe{% endif %}">
+                            {% if result.sqli %}🚫 Sí{% else %}✅ No{% endif %}
+                        </span>
+                    </p>
+                </div>
+                {% endif %}
+
+                <footer style="margin-top: 50px; color: #666;">
+                    <small>⚠️ Solo escanee sitios con permiso explícito.</small>
+                </footer>
             </div>
         </div>
     </div>
