@@ -1,5 +1,7 @@
 import sqlite3
 from flask import Flask, request, g, render_template_string
+from urllib.parse import urljoin, urlparse
+from bs4 import BeautifulSoup
 
 DATABASE = 'vulnerable3.db'
 

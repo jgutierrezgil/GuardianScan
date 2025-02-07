@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Reporte de GuardianScan</title>
+  <style>
+    /* Estilos especiales para PDF, por ejemplo: */
+    body {
+      font-family: Arial, sans-serif;
+    }
+    h1 { color: #333; }
+    .vulnerable { color: red; }
+    .safe { color: green; }
+  </style>
+</head>
+<body>
+  <h1>Reporte de GuardianScan</h1>
+  <p>URL principal analizada: {{ result.url }}</p>
+  
+  {% if result.scanned_data %}
+    {% for data in result.scanned_data %}
+      <hr>
+      <h3>URL: {{ data.url }}</h3>
+      <p>
+        XSS Vulnerable (GET):
+        <span class="{% if data.xss_get %}vulnerable{% else %}safe{% endif %}">
+          {% if data.xss_get %}Sí{% else %}No{% endif %}
+        </span>
+      </p>
+      {% if data.xss_get %}
+        <div>
+          <p>Payloads exitosos (GET):</p>
+          <ul>
+          {% for payload in data.xss_get %}
+            <li>{{ payload }}</li>
+          {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+      
+      <p>
+        SQLi Vulnerable (GET):
+        <span class="{% if data.sqli_get %}vulnerable{% else %}safe{% endif %}">
+          {% if data.sqli_get %}Sí{% else %}No{% endif %}
+        </span>
+      </p>
+      {% if data.sqli_get %}
+        <div>
+          <p>Payloads exitosos (GET):</p>
+          <ul>
+            {% for payload in data.sqli_get %}
+              <li>{{ payload }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+  
+  <hr>
+  <small>Generado por GuardianScan. Solo escanea con autorización.</small>
+</body>
+</html>
