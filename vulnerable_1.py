@@ -5,11 +5,12 @@ app = Flask(__name__)
 @app.route("/", methods=["GET"])
 def index():
     return """
-    <h1>Bienvenido a la aplicación vulnerable a XSS</h1>
-    <p>Esta aplicación es vulnerable a Cross-Site Scripting (XSS).</p>
-    <p>Para probar la vulnerabilidad, utiliza la siguiente ruta:</p>
+    <h1>Welcome to the XSS vulnerable application</h1>
+    <p>This application is vulnerable to Cross-Site Scripting (XSS).</p>
+    <p>The app doesn't sanitize the user input, allowing attackers to inject malicious scripts.</p>
+    <p>To test the vulnerability, use the following path or use GuardianScan:</p>
     <p>
-        <code>/xss?q=</code> seguido de tu payload.
+        <code>/xss?q=</code> followed by your payload.
         <br>
         Ejemplo:
         <a href="/xss?q=%3Cscript%3Ealert('XSS')%3C/script%3E">
@@ -22,7 +23,6 @@ def index():
 def vulnerable_xss():
     # Se espera un parámetro 'q' en la URL (ej: /xss?q=payload)
     user_input = request.args.get('q', '')
-    # ¡Vulnerabilidad! Se refleja el input del usuario sin ningún escape.
     html = f"""
     <html>
         <head>

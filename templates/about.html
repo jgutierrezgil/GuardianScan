@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    About
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1>About GuardianScan</h1>
+        <div class="row">
+            <code>
+                Note: With the approach used with SQLite3, false positives can occur if the application (or middleware) generates responses containing these
+                messages for other reasons. Similarly, detections can be missed if the application handles errors elegantly without
+                exposing the details (which is good practice). In a pentesting environment, it is advisable to combine these automatic tests with manual analysis.
+            </code>
+                
+            <code>
+                Note: Finding web vulnerabilities is a complex task that cannot rely solely on automated tools. 
+                While scanners are helpful for initial reconnaissance, the human factor in pentesting remains crucial. 
+                Manual analysis allows testers to understand context, identify logical flaws, and discover vulnerabilities 
+                that automated tools might miss. A comprehensive security assessment requires both automated and manual 
+                approaches working together.
+            </code>
+        </div>
+    </div>
+{% endblock %}

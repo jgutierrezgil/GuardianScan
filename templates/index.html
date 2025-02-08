@@ -8,28 +8,35 @@
     <div class="container mt-4">
         <h1>Welcome to GuardianScan</h1>
         <div class="row">
-            <div class="col"> <p>Welcome to <strong>GuardianScan</strong>, a web security analysis tool created as the final project for Harvard University's CS50 course.</p> <p>GuardianScan is designed to detect common vulnerabilities in web applications, focusing primarily on Cross-Site Scripting (XSS) and SQL Injection (SQLi). The tool allows users to specify a target URL, then automatically crawls all internal links within that site. For each discovered link, GuardianScan sends specially crafted payloads to test whether the page is susceptible to malicious code injection or database manipulation.</p> <p>If a page is found to be vulnerable, GuardianScan logs the successful payloads and provides a comprehensive report indicating which parts of the application are at risk. This empowers developers, security researchers, and site owners to remediate potential flaws before they can be exploited by attackers. As a learning project, GuardianScan demonstrates fundamental concepts of web security, but it can also serve as a practical starting point for anyone interested in building more advanced vulnerability scanners.</p> </div>
+            <div class="col"> <p>Welcome to <strong>GuardianScan</strong>, a web security analysis tool created as the final project for Harvard University's CS50 course.</p> 
+                <p>GuardianScan is designed to detect common vulnerabilities in web applications, focusing primarily on simple attacks using Cross-Site Scripting (XSS) and SQL Injection (SQLi). 
+                The tool allows users to specify a target URL, then automatically crawls all internal links within that site. For each discovered link, GuardianScan sends specially 
+                crafted payloads to test whether the page is susceptible to malicious code injection or database manipulation.</p> 
+                <p>If a page is found to be vulnerable, GuardianScan logs the successful payloads and provides a comprehensive report indicating which parts of the application are at risk. 
+                    This empowers developers, security researchers, and site owners to remediate potential flaws before they can be exploited by attackers. 
+                    As a learning project, GuardianScan demonstrates fundamental concepts of web security, but it can also serve as a practical starting point for anyone interested in building more advanced vulnerability scanners.</p> 
+            </div>
             <div class="col">
                 <form method="POST">
-                    <input type="text" name="url" placeholder="Ej: http://localhost:5001/xss?q=" required style="width: 300px;">
+                    <input type="text" name="url" placeholder="Ej: http://localhost:5001/" required style="width: 300px;">
                     <div class="mt-2">
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="payload_type" id="default" value="default" checked>
                             <label class="form-check-label" for="default">
-                                Usar payloads por defecto
+                                Use payloads by defect
                             </label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="payload_type" id="custom" value="custom">
                             <label class="form-check-label" for="custom">
-                                Usar payload personalizado
+                                Use custom payload
                             </label>
                         </div>
                         <div id="custom_payload_div" class="mt-2" style="display: none;">
-                            <input type="text" name="custom_payload" placeholder="Ingrese su payload personalizado" style="width: 300px;">
+                            <input type="text" name="custom_payload" placeholder="Use custom payload" style="width: 300px;">
                         </div>
                     </div>
-                    <button type="submit" class="mt-2">Escanear</button>
+                    <button type="submit" class="mt-2">Scan</button>
                 </form>
                 <script>
                     document.querySelectorAll('input[name="payload_type"]').forEach((elem) => {
@@ -41,19 +48,19 @@
                 </script>
             
             {% if result.scanned_data %}
-            <h3>Resultados del escaneo para {{ result.url }} y todas sus rutas encontradas:</h3>
+            <h3>Scan results for {{ result.url }} and all its routes found:</h3>
         
                 {% for data in result.scanned_data %}
                     <hr>
                     <h4>URL: {{ data.url }}</h4>
                     <p>XSS Vulnerable (GET):
                         <span class="{% if data.xss_get %}vulnerable{% else %}safe{% endif %}">
-                            {% if data.xss_get %}🚫 Sí{% else %}✅ No{% endif %}
+                            {% if data.xss_get %}🚫 Yes{% else %}✅ No{% endif %}
                         </span>
                     </p>
                     {% if data.xss_get %}
                         <div style="margin-left: 20px;">
-                            <p>Payloads exitosos (GET):</p>
+                            <p>Successful Payloads (GET):</p>
                             <ul>
                             {% for payload in data.xss_get %}
                                 <li>{{ payload }}</li>
@@ -69,7 +76,7 @@
                     </p>
                     {% if data.sqli_get %}
                         <div style="margin-left: 20px;">
-                            <p>Payloads exitosos (GET):</p>
+                            <p>Successful Payloads (GET):</p>
                             <ul>
                             {% for payload in data.sqli_get %}
                                 <li>{{ payload }}</li>
@@ -79,13 +86,13 @@
                     {% endif %}
                 {% endfor %}
                 <a href="{{ url_for('report') }}" class="btn btn-primary">
-                    Ver reporte completo
+                    View complete report
                 </a>
             {% endif %}
         
 
                 <footer style="margin-top: 50px; color: #666;">
-                    <small>⚠️ Solo escanee sitios con permiso explícito.</small>
+                    <small>⚠️ Only scan sites with explicit permission..</small>
                 </footer>
             </div>
         </div>

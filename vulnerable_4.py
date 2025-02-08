@@ -3,18 +3,18 @@ import sqlite3
 
 app = Flask(__name__)
 
-# Configuración de la base de datos SQLite
-DATABASE = 'users.db'
+# SQLite database configuration
+DATABASE = 'vulnerable4.db'
 
 def init_db():
     """
-    Inicializa la base de datos y crea la tabla si no existe.
-    También inserta un usuario inicial si la tabla está vacía.
+    Initializes the database and creates the table if it doesn't exist.
+    Also inserts an initial user if the table is empty.
     """
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
 
-    # Crear la tabla si no existe
+    # Create the table if it doesn't exist
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS users (
             username TEXT PRIMARY KEY,
@@ -22,54 +22,54 @@ def init_db():
         )
     ''')
 
-    # Verificar si hay usuarios en la tabla
+    # Check if there are any users in the table
     cursor.execute("SELECT COUNT(*) FROM users")
     if cursor.fetchone()[0] == 0:
-        # Insertar un usuario inicial si la tabla está vacía
+        # Insert an initial user if the table is empty
         cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", ('admin', 'password123'))
         conn.commit()
-        print("Usuario inicial 'admin' creado.")
+        print("Initial user 'admin' created.")
 
     conn.close()
 
 @app.route('/')
 def home():
     return '''
-    <h1>Bienvenido a la aplicación vulnerable</h1>
-    <p>Esta aplicación es vulnerable a ataques XSS.</p>
+    <h1>Welcome to safe App</h1>
+    <p>This site has been protected from XSS by escaping user inputs
+         and from SQL Injection by using parameterized queries.</p>
     <ul>
         <li><a href="/login">Login (POST)</a></li>
         <li><a href="/search">Buscar usuario (GET)</a></li>
     </ul>
     '''
 
-# Ruta vulnerable a XSS mediante POST
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form.get('username', '')
         password = request.form.get('password', '')
 
-        # Consulta segura usando parámetros
+        # Secure query using parameters to avoid SQL Injection
         conn = sqlite3.connect(DATABASE)
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
         user = cursor.fetchone()
         conn.close()
 
-        # Vulnerabilidad XSS: Respuesta no sanitizada
+        # Prevent XSS by rendering the message through a template that escapes special characters
         if user:
-            message = f"Bienvenido, <b>{username}</b>!"
+            message = f"Bienvenido, {username}!"
         else:
             message = "Credenciales incorrectas."
 
-        return f'''
-        <h1>Resultado del login:</h1>
-        <p>{message}</p>
-        <a href="/login">Intentar de nuevo</a>
-        '''
+        return render_template_string('''
+            <h1>Resultado del login:</h1>
+            <p>{{ message }}</p>
+            <a href="/login">Intentar de nuevo</a>
+        ''', message=message)
 
-    # Formulario de login
+    # Login form
     return '''
     <h1>Login</h1>
     <form method="POST">
@@ -81,18 +81,26 @@ def login():
     </form>
     '''
 
-# Ruta vulnerable a XSS mediante GET
-@app.route('/search')
+@app.route('/search', methods=['GET'])
 def search():
     query = request.args.get('q', '')
-    # Vulnerabilidad XSS: Respuesta no sanitizada
-    return f'''
-    <h1>Resultados de búsqueda:</h1>
-    <p>Buscaste: <b>{query}</b></p>
-    <a href="/search">Buscar de nuevo</a>
-    '''
+
+    # Aquí se incluye un formulario GET para realizar la búsqueda.
+    # Al enviar el formulario, se recarga la misma ruta con el parámetro ?q=...
+    return render_template_string('''
+        <h1>Búsqueda</h1>
+        <form method="GET" action="/search">
+            <label for="q">Ingresa tu búsqueda:</label><br>
+            <input type="text" name="q" id="q" value="{{ query }}"><br><br>
+            <button type="submit">Buscar</button>
+        </form>
+
+        <h2>Resultados de búsqueda:</h2>
+        <p>Buscaste: <b>{{ query }}</b></p>
+        <a href="/search">Buscar de nuevo</a>
+    ''', query=query)
 
 if __name__ == '__main__':
-    # Inicializar la base de datos al iniciar la aplicación
+    # Initialize the database when starting the application
     init_db()
     app.run(port='5004', debug=True)

@@ -5,7 +5,7 @@ from flask import Flask, render_template, request, redirect, url_for
 import requests
 
 app = Flask(__name__)
-# Variable global para almacenar el resultado del último escaneo
+# Global variable to store the result of the last scan.
 last_scan_data = None
 
 @app.route("/", methods=["GET", "POST"])
@@ -123,8 +123,17 @@ def report():
     if not last_scan_data:
         return "No hay datos de escaneo disponibles.", 400
 
-    # Renderizamos la plantilla de reporte con los datos guardados
+    # Render the report template with the saved data
     return render_template("report_template.html", result=last_scan_data)
+
+@app.route("/about", methods=["GET"])
+def about():
+    """
+    Displays information about the application.
+    Returns:
+        template: Renders the about.html template
+    """
+    return render_template("about.html")
 
 def crawl(start_url, max_depth=2):
     """
