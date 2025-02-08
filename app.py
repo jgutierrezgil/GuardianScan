@@ -244,8 +244,9 @@ def check_xss_get(url, payloads):
         try:
             full_url = url + payload
             response = requests.get(full_url)
-            if payload in response.text:
-                # Se acumulan todos los payloads exitosos
+            # Verificar si el payload está presente sin escapar
+            unescaped_payload = payload.replace('<', '&lt;').replace('>', '&gt;')
+            if payload in response.text and unescaped_payload not in response.text:
                 xss_payload_success.append(payload)
         except Exception as e:
             print(f"Error al probar el payload '{payload}': {e}")
@@ -278,7 +279,11 @@ def check_sqli_get(url, payloads):
             print("Found vulnerable payloads:", results)
    """
     sqli_payload_success = []
-    error_keywords = ["error", "syntax", "sql"]
+    error_keywords = [
+        "error", "syntax", "sql", "sqlite", 
+        "database", "malformed", "near",
+        "operational error"
+    ]
     for payload in payloads:
         try:
             full_url = url + payload
