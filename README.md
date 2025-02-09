@@ -1,6 +1,7 @@
 # GuardianScan
-#### Video Demo:  <URL HERE>
-#### Description:
+
+`This project was originally developed to be presented as the final project for Harvard University's CS50, although it was ultimately discarded in favor of GuardiaPass, which can be found in this same repository.`
+
 # Welcome to **GuardianScan**
 
 GuardianScan is a web security analysis tool developed as the final project for Harvard University's CS50 course. This tool is designed to help identify common vulnerabilities in web applications, with a primary focus on **Cross-Site Scripting (XSS)** and **SQL Injection (SQLi)**.
